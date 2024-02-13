@@ -1,0 +1,34 @@
+{
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "aduit-sq-firewall-rules",
+  "properties": {
+    "displayName": "Audit SQL Firewall Rules",
+    "description": "Depending on the configuration this policy will Audit, Allow or Deny the creation of new Firewall rules for an SQL Server.",
+    "metadata": {
+      "category": "SQL"
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Specify the effect for the policy. Valid values: 'deny', 'audit', 'disabled'."
+        },
+        "allowedValues": ["deny", "audit", "disabled"]
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Sql/servers/firewallRules"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}
