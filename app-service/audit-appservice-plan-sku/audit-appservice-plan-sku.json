@@ -1,0 +1,42 @@
+{
+    "mode": "All",
+    "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Web/serverfarms"
+            },
+            {
+              "not": {
+                "field": "Microsoft.Web/serverfarms/sku.name",
+                "in": "[parameters('tiers')]"
+              }
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      },
+    "parameters": {
+        "tiers": {
+          "type": "Array",
+          "metadata": {
+            "description": "List of allowed or denied tiers for App Service Plans",
+            "displayName": "Tiers"
+          }
+        },
+        "effect": {
+          "type": "String",
+          "allowedValues": [
+            "Allow",
+            "Deny"
+          ],
+          "metadata": {
+            "description": "Deny or Allow the specified tiers",
+            "displayName": "Effect"
+          }
+        }
+      }
+  }
