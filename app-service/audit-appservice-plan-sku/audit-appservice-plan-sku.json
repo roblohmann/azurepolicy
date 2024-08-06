@@ -8,10 +8,8 @@
               "equals": "Microsoft.Web/serverfarms"
             },
             {
-              "not": {
-                "field": "Microsoft.Web/serverfarms/sku.name",
-                "in": "[parameters('tiers')]"
-              }
+              "field": "Microsoft.Web/serverfarms/sku.name",
+              "in": "[parameters('tiers')]"
             }
           ]
         },
