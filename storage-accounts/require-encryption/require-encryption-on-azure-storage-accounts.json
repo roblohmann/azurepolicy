@@ -1,0 +1,62 @@
+{
+    "properties": {
+      "displayName": "Require encryption on Azure Storage accounts",
+      "policyType": "Custom",
+      "mode": "All",
+      "metadata": {
+        "category": "Storage Accounts",
+        "createdBy": "b3da1b88-8d38-4e45-a050-86e6ec2f5f92",
+        "createdOn": "2024-11-06T15:44:45.7807513Z",
+        "updatedBy": null,
+        "updatedOn": null
+      },
+      "version": "1.0.0",
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          },
+          "allowedValues": [
+            "AuditIfNotExists",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "AuditIfNotExists"
+        }
+      },
+      "policyRule": {
+        "if": {
+          "field": "type",
+          "equals": "Microsoft.Storage/storageAccounts"
+        },
+        "then": {
+          "effect": "[parameters('effect')]",
+          "details": {
+            "type": "Microsoft.Storage/storageAccounts/encryption",
+            "existenceCondition": {
+              "allOf": [
+                {
+                  "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.enabled",
+                  "equals": "true"
+                },
+                {
+                  "field": "Microsoft.Storage/storageAccounts/encryption.services.file.enabled",
+                  "equals": "true"
+                },
+                {
+                  "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.enabled",
+                  "equals": "true"
+                },
+                {
+                  "field": "Microsoft.Storage/storageAccounts/encryption.services.table.enabled",
+                  "equals": "true"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
