@@ -1,0 +1,50 @@
+{
+  "properties": {
+    "displayName": "Prevent creation of Web Apps with legacy SKUs",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This policy prevents the creation of Azure Web Apps using specified legacy SKU sizes (S1, S2, S3, P1, P2, P3, P1V2, P2V2, P3V2)."
+  },
+  "version": "1.0.0",
+  "parameters": {
+    "effect": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": "Enable or disable the policy"
+      },
+      "allowedValues": ["Deny", "Audit", "Disabled"],
+      "defaultValue": "Deny"
+    }
+  },
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Web/serverfarms"
+        },
+        {
+          "anyOf": [
+            {
+              "field": "Microsoft.Web/serverfarms/sku.tier",
+              "in": ["Standard", "Premium", "PremiumV2"]
+            },
+            {
+              "field": "Microsoft.Web/serverfarms/sku.name",
+              "in": ["S1", "S2", "S3", "P1", "P2", "P3", "P1V2", "P2V2", "P3V2"]
+            }
+          ]
+        },
+        {
+          "field": "Microsoft.Web/serverfarms/sku.name",
+          "in": ["S1", "S2", "S3", "P1", "P2", "P3", "P1V2", "P2V2", "P3V2"]
+        }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]"
+    }
+  },
+  "versions": ["1.0.0"]
+}
